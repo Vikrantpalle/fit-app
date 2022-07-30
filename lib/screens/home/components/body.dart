@@ -2,148 +2,104 @@ import 'dart:math';
 
 import 'package:fit_app/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        _cardWithProgressBar("Steps", "7896", "/10000", Colors.green),
-        _cardWithProgressBar("Sleep", "8", "hrs", Colors.purple),
-        _cardWithButton("Calories", "56", "cal", "Add food"),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: GridView.count(
+        crossAxisCount: 2,
+        crossAxisSpacing: 0.0,
+        children: [
+          _card("Steps", Color(0xFFFDC830), Color(0xFFF37335),
+              Icon(Icons.sports_football_sharp)),
+          _card("Sleep", Color(0xFF00B4DB), Color(0xFF0083B0),
+              Icon(Icons.bed_sharp)),
+          _card("Heartbeat", Color(0xFF00b09b), Color(0xFF96c93d),
+              Icon(Icons.heart_broken)),
+          _card(
+              "Water", Color(0xFF4e54c8), Color(0xFF8f94fb), Icon(Icons.water))
+        ],
+      ),
     );
   }
 }
 
-Widget _cardWithProgressBar(
-    String title, String text1, String text2, Color barColor) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-    child: Card(
-      color: Color.fromRGBO(243, 234, 234, 0.1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: kDefaultPadding / 2, horizontal: kDefaultPadding),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
+Widget _card(String header, Color start, Color end, Icon icon) {
+  return Stack(children: [
+    Container(
+      width: 200,
+      height: 200,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+          gradient: LinearGradient(
+              begin: Alignment(-1.0, -4.0),
+              end: Alignment(1.0, 4.0),
+              colors: [
+                start,
+                end,
+              ]),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black54,
+              blurRadius: 5.0,
+            )
+          ]),
+      child: Column(children: [
+        Row(
           children: [
-            Expanded(
-                child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: kDefaultPadding / 2),
-                  child: Row(
-                    children: [
-                      Text(
-                        text1,
-                        style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        text2,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )),
-            Column(
-              children: [
-                CustomPaint(
-                  child: Container(
-                    width: 100,
-                  ),
-                  painter: ProgressBar(barColor),
-                ),
-              ],
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kDefaultPadding, vertical: kDefaultPadding / 2),
+              child: Text(
+                header,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              ),
             )
           ],
         ),
-      ),
+        Expanded(
+          child: Container(
+            child: SfRadialGauge(axes: <RadialAxis>[
+              RadialAxis(
+                  showLabels: false,
+                  showTicks: false,
+                  minimum: 0,
+                  maximum: 100,
+                  radiusFactor: 0.9,
+                  axisLineStyle: AxisLineStyle(
+                      thickness: 0.2,
+                      thicknessUnit: GaugeSizeUnit.factor,
+                      cornerStyle: CornerStyle.bothCurve),
+                  pointers: <GaugePointer>[
+                    RangePointer(
+                      value: 60,
+                      width: 0.2,
+                      sizeUnit: GaugeSizeUnit.factor,
+                      cornerStyle: CornerStyle.bothCurve,
+                      gradient: const SweepGradient(
+                          colors: <Color>[Color(0xFFCC2B5E), Color(0xFF753A88)],
+                          stops: <double>[0.25, 0.75]),
+                    )
+                  ]),
+            ]),
+          ),
+        )
+      ]),
     ),
-  );
-}
-
-Widget _cardWithButton(
-    String title, String text1, String text2, String btnText) {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding / 2),
-    child: Card(
-      color: Color.fromRGBO(243, 234, 234, 0.1),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: kDefaultPadding / 2, horizontal: kDefaultPadding),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-                child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: kDefaultPadding / 2),
-                  child: Row(
-                    children: [
-                      Text(
-                        text1,
-                        style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        text2,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-              ],
-            )),
-            Column(
-              children: [
-                ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(Icons.add, size: 18),
-                    label: Text(btnText))
-              ],
-            )
-          ],
-        ),
-      ),
+    Positioned(
+      top: 0,
+      left: 200,
+      child: MyArc(100),
     ),
-  );
+    Positioned(
+      child: icon,
+      top: 8,
+      left: 168,
+    )
+  ]);
 }
 
 class ProgressBar extends CustomPainter {
@@ -171,4 +127,40 @@ class ProgressBar extends CustomPainter {
     // TODO: implement shouldRepaint
     return false;
   }
+}
+
+class MyArc extends StatelessWidget {
+  final double diameter;
+
+  MyArc(this.diameter);
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: MyPainter(),
+      size: Size(diameter, diameter),
+    );
+  }
+}
+
+// This is the Painter class
+class MyPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()..color = Colors.white38;
+    canvas.drawArc(
+      Rect.fromCenter(
+        center: Offset(0.0, 0.0),
+        height: size.height,
+        width: size.width,
+      ),
+      pi / 2,
+      pi / 2,
+      true,
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
